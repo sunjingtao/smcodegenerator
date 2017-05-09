@@ -8,14 +8,11 @@ import com.intellij.ide.passwordSafe.PasswordSafeException;
 import com.intellij.ide.passwordSafe.PasswordStorage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.io.FileUtil;
 
-import java.io.File;
 import java.io.IOException;
 
 public class ExternalProcessHandler {
     private static String externalProcessPath = null;
-    private static File dataFile = null;
     private static Process externalProcess = null;
     private static DbSchemaElement schemaElement;
     private static Project project;
@@ -26,7 +23,6 @@ public class ExternalProcessHandler {
         classPath = classPath.substring(0,classPath.lastIndexOf("\\"));
         classPath = classPath.substring(0,classPath.lastIndexOf("\\"));
         externalProcessPath = classPath + "\\plugins\\DatabaseTools\\smcg.exe";
-        dataFile = new File(classPath.substring(0,classPath.indexOf("\\"))+"\\smcg\\trans.data");
     }
 
     public static void start(DbSchemaElement schemaElement,Project project) {
@@ -41,31 +37,28 @@ public class ExternalProcessHandler {
             if(externalProcess != null){
                 externalProcess.destroy();
             }
-            FileUtil.writeToFile(dataFile,getTransData());
-            externalProcess = runtime.exec(externalProcessPath);
+            externalProcess = runtime.exec(externalProcessPath + getCommandArgs());
         } catch (IOException e) {
             Messages.showErrorDialog("cannot start external process", "SMCG");
         }
     }
 
-    private static String getTransData() {
+    private static String getCommandArgs() {
         DbDataSourceElement sourceElement = schemaElement.getDataSource();
         StringBuilder builder = new StringBuilder();
-        builder.append("transdataDir$");
-        builder.append(dataFile.getAbsolutePath());
-        builder.append(",projectDir$");
+        builder.append(" ");
         builder.append(project.getBaseDir());
-        builder.append(",databaseType$");
+        builder.append(" ");
         builder.append(sourceElement.getDatabaseProductName());
-        builder.append(",databaseVersion$");
+        builder.append(" ");
         builder.append(sourceElement.getDatabaseProductVersion());
-        builder.append(",url$");
+        builder.append(" ");
         builder.append(sourceElement.getConnectionInfo().getEffectiveUrl());
         LocalDataSource dataSource = getSelectedDataSource(sourceElement.getUniqueId());
         if(dataSource!=null) {
-            builder.append(",userName$");
+            builder.append(" ");
             builder.append(dataSource.getUsername());
-            builder.append(",password$");
+            builder.append(" ");
             builder.append(getDataSourcePassword(dataSource));
         }
         return builder.toString();
