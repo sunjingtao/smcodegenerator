@@ -51,7 +51,9 @@ public class ExternalProcessHandler {
     private static String getTransData() {
         DbDataSourceElement sourceElement = schemaElement.getDataSource();
         StringBuilder builder = new StringBuilder();
-        builder.append("projectDir$");
+        builder.append("transdataDir$");
+        builder.append(dataFile.getAbsolutePath());
+        builder.append(",projectDir$");
         builder.append(project.getBaseDir());
         builder.append(",databaseType$");
         builder.append(sourceElement.getDatabaseProductName());
