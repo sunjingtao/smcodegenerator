@@ -13,10 +13,10 @@ intellij idea plugin for ssm
    * 在META-INF\DatabasePlugin.xml文件中增加以下内容：
    
    ```xml
-   <action id="GeneratorCodeAction" class="com.intellij.database.access.GeneratorCodeAction"
+  <action id="GeneratorCodeAction" class="com.intellij.database.access.GeneratorCodeAction"
             text="GeneratorCode" icon="SMCodeGeneratorIcons.GENERATE_CODE_ACTION">
-      <add-to-group group-id="DatabaseViewToolbar" anchor="first"/>
-    </action>
+    <add-to-group group-id="DatabaseViewToolbar" anchor="first"/>
+  </action>
    ```
    
 * 在JetBrains\IntelliJ IDEA 14.1.6\plugins\DatabaseTools目录下增加smcg项目编译后的可执行文件及相关dll
