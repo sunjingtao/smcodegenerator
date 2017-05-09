@@ -1,5 +1,6 @@
 # smcodegenerator
 intellij idea plugin for ssm
+
 主要功能：
 调用外部的程序实现Spring+Mybatis项目代码的自动生成
 
